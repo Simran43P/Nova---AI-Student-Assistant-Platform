@@ -1,25 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import Dashboard from "./Dashboard";
+import Login from "./Login"; 
 
 function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // login state
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Routes>
+        {/* Login page */}
+        <Route path="/" element={<Login setIsLoggedIn={setIsLoggedIn} />} />
+
+        {/* Dashboard page - only accessible if logged in */}
+        <Route
+          path="/dashboard"
+          element={
+            isLoggedIn ? <Dashboard /> : <Navigate to="/" replace />
+          }
+        />
+
+        {/* Fallback */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </Router>
   );
 }
 
 export default App;
+
